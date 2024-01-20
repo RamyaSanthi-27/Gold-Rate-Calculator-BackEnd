@@ -19,7 +19,6 @@ const loginUser = require('./routes/auth/login');
 const activateUser = require('./routes/auth/activate');
 const forgotPass = require('./routes/auth/forgetPass');
 const resetPass = require('./routes/auth/reset');
-const updateSetting = require('./routes/auth/settings');
 
 
 app.use(morgan('tiny'))
@@ -38,7 +37,6 @@ app.get("/api/activate-account/:email/:token", activateUser);
 app.post('/api/login', loginUser)
 app.post('/api/forgot-password', forgotPass)
 app.post("/api/reset-password/:token", resetPass)
-app.patch("/api/updateSetting/:id", updateSetting)
 
 connect_DB(DB_URL)
 app.listen(process.env.PORT, () => {
