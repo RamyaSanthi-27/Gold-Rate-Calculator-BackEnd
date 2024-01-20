@@ -15,7 +15,7 @@ const activateUser = async (req, res) => {
             })
 
             if (activateUser.modifiedCount === 1) {
-                res.redirect(`https://gold-rate-calculator-frontend.vercel.app/`)
+                res.redirect(`https://gold-rate-calculator-frontend.vercel.app`)
             } else {
                 res.status(404).json({
                     message: "User not found or account is already activated"
