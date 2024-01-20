@@ -1,72 +1,47 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import logger from "morgan";
-import createError from "http-errors";
-import path from "path";
-import cookieParser from "cookie-parser";
-
-
-import { dataBaseConnection } from "./database/dbConfig.js";
-import { userSignup } from "./routes/userSignup.js";
-import { userLogin } from "./routes/userLogin.js";
-import { forgotPassword } from "./routes/forgotPassword.js";
-import { resetPassword } from "./routes/resetPassword.js";
-import { verifyRandomString } from "./routes/verifyRandomString.js";
-
-
-// var logger = require('morgan');
-import { indexRouter } from "./routes/index.js";
-import {goldRouter} from "./routes/gold.js";
-
-// var indexRouter = require('./routes/index');
-// var goldRouter = require('./routes/gold');
-
-//Configuring the environmental variable
-dotenv.config();
-
-//Server Setup
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const jsonwebtoken = require('jsonwebtoken');
+const dotenv = require('dotenv').config();
+const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT;
+const mongoose = require('mongoose');
+const DB_URL = process.env.MD_URL
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
-//Middlewares
-app.use(express.json());
-app.use(cors());
-app.use(logger('dev'));
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
+// {This is all about own module}
 
-//Database Connection
-dataBaseConnection();
+const User = require('./modal/register')
 
-//Routes
-app.use("/api/user/resetPassword", resetPassword);
-app.use("/api/user/verifyRandomString", verifyRandomString);
-app.use("/api/user/forgotPassword", forgotPassword);
-app.use("/api/user/login", userLogin);
-app.use("/api/user/signup", userSignup);
+const connect_DB = require('./db/db')
+const mealSchema = require('./modal/fooditem');
+const registerUser = require('./routes/auth/register');
+const loginUser = require('./routes/auth/login');
+const activateUser = require('./routes/auth/activate');
+const forgotPass = require('./routes/auth/forgetPass');
+const resetPass = require('./routes/auth/reset');
+const updateSetting = require('./routes/auth/settings');
 
-app.use('/', indexRouter);
-app.use('/gold_rate', goldRouter);
 
-//  catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+app.use(morgan('tiny'))
+app.use(express.json())
+app.use(cors({
+    origin: "*"
+}))
+app.use(bodyParser.json())
+app.get('/', (req, res) => {
+    res.send({
+        hello: "Server Checking"
+    })
+})
+app.post("/api/register", registerUser)
+app.get("/api/activate-account/:email/:token", activateUser);
+app.post('/api/login', loginUser)
+app.post('/api/forgot-password', forgotPass)
+app.post("/api/reset-password/:token", resetPass)
+app.patch("/api/updateSetting/:id", updateSetting)
 
-// // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-//Listening the Server
-app.listen(PORT, () => {
-  console.log(`Server Started in localhost:${PORT}`);
-});
+connect_DB(DB_URL)
+app.listen(process.env.PORT, () => {
+    console.log(`server started at http://localhost:${process.env.PORT} ...`);
+})
