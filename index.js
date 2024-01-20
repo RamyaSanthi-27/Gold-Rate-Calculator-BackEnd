@@ -24,8 +24,11 @@ const resetPass = require('./routes/auth/reset');
 app.use(morgan('tiny'))
 app.use(express.json())
 app.use(cors({
-    origin: "*"
-}))
+  origin: "http://localhost:5173",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  exposedHeaders: ["Authorization"],
+}));
 app.use(bodyParser.json())
 app.get('/', (req, res) => {
     res.send({
