@@ -19,7 +19,8 @@ const loginUser = require('./routes/auth/login');
 const activateUser = require('./routes/auth/activate');
 const forgotPass = require('./routes/auth/forgetPass');
 const resetPass = require('./routes/auth/reset');
-
+const goldInr = require ('./routes/gold/Inr');
+const getINR = require('./routes/gold/Inr');
 
 app.use(morgan('tiny'))
 app.use(express.json())
@@ -37,6 +38,8 @@ app.get("/api/activate-account/:email/:token", activateUser);
 app.post('/api/login', loginUser)
 app.post('/api/forgot-password', forgotPass)
 app.post("/api/reset-password/:token", resetPass)
+app.post("/api/goldInr",goldInr)
+app.get("/api/getInr",getINR)
 
 connect_DB(DB_URL)
 app.listen(process.env.PORT, () => {
