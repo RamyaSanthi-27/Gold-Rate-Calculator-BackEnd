@@ -8,40 +8,38 @@ const resetPass = async (req, res) => {
         const { password } = req.body
         const token = req.params.token
 
-        // if (password !== confirmPassword) {
-        //     return res.status(404).json({ message: "password must match" })
-        // } else {
-        //     jsonwebtoken.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-        //         try {
-        //             if (err) {
-        //                 return res.json({
-        //                     message: "Error with token"
-        //                 })
-        //             } else {
+       
+            jsonwebtoken.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+                try {
+                    if (err) {
+                        return res.json({
+                            message: "Error with token"
+                        })
+                    } else {
 
-        //                 const hashPassword = await bcrypt.hash(password, 10)
+                        const hashPassword = await bcrypt.hash(password, 10)
 
-        //                 const { id } = decoded
+                        const { id } = decoded
 
-        //                 const updatePass = await User.findByIdAndUpdate(id, {
-        //                     $set: {
-        //                         password: hashPassword
-        //                     }
+                        const updatePass = await User.findByIdAndUpdate(id, {
+                            $set: {
+                                password: hashPassword
+                            }
 
-        //                 },
-        //                     {
-        //                         new: true
-        //                     }
+                        },
+                            {
+                                new: true
+                            }
 
-        //                 )
-        //                 res.send({ message: "Password changed succesfully", updatePass })
-        //             }
-        //         } catch (error) {
-        //             console.log(error)
-        //             res.status(500).json({ message: "Control error" })
-        //         }
-        //     })
-        // }
+                        )
+                        res.send({ message: "Password changed succesfully", updatePass })
+                    }
+                } catch (error) {
+                    console.log(error)
+                    res.status(500).json({ message: "Control error" })
+                }
+            })
+        
 
 
 
