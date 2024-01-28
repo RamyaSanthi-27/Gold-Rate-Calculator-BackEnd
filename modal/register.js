@@ -1,7 +1,5 @@
-
 const { Schema, model } = require('mongoose');
-const router = express.Router();
-import bcrypt from "bcryptjs";
+
 
 const userSchema = new Schema({
     email: {

@@ -9,7 +9,7 @@ const DB_URL = process.env.MD_URL
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
-// {This is all about own module}
+// {This is all about own module} 
 
 const User = require('./modal/register')
 
@@ -18,9 +18,9 @@ const registerUser = require('./routes/auth/register');
 const loginUser = require('./routes/auth/login');
 const activateUser = require('./routes/auth/activate');
 const forgotPass = require('./routes/auth/forgetPass');
-const resetPass = require('./routes/auth/reset');
+const resetPass = require('./routes/auth/reset.js');
 const goldInr = require ('./routes/gold/Inr');
-//const getINR = require('./routes/gold/Inr');
+const getINR = require('./routes/gold/Inr');
 
 app.use(morgan('tiny'))
 app.use(express.json())
@@ -39,7 +39,7 @@ app.post('/api/login', loginUser)
 app.post('/api/forgot-password', forgotPass)
 app.post("/api/reset-password/:token", resetPass)
 app.post("/api/goldInr",goldInr)
-//app.get("/api/getInr",getINR)
+app.get("/api/getInr",getINR)
 
 connect_DB(DB_URL)
 app.listen(process.env.PORT, () => {

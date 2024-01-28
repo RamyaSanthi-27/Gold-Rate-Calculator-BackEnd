@@ -26,5 +26,4 @@ const getINR = async(req,res)=>{
         res.status(400).send({message : "Cannot get price"})
     }
 }
-module.exports = goldInr
 module.exports = getINR

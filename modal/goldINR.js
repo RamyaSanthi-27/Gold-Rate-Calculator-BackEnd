@@ -1,14 +1,15 @@
 
-const { Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const goldRateINR = new Schema({
-    currency:{
+    currency: {
         type: String,
         required: true
     },
-    price : {
+    price: {
         type: Number,
         required: true
     }
-})
-module.exports = model("goldINR",goldRateINR)
+});
+
+module.exports = model("goldINR", goldRateINR);
